@@ -27,11 +27,21 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install basic dependencies
+    - name: Install Poetry
+      uses: dschep/install-poetry-action@v1.2
+    - name: Restore Poetry virtualenv
+      uses: actions/cache@v1
+      id: cache
+      with:
+        path: ~/.virtualenvs
+        key: poetry-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: poetry-${{ hashFiles('**/poetry.lock') }}
+    - name: Set poetry config
       run: |
-        python -m pip install -U pip
-        pip install flake8 pytest
-    - name: Install package dependencies
-      run: pip install git+https://github.com/daigo0927/tf-simple-metric-learning.git@develop
+        poetry config virtualenvs.in-project false
+        poetry config virtualenvs.path ~/.virtualenvs
+    - name: Install basic dependencies
+      run: poetry install
+      if: steps.cache.outputs.cache-hit != 'true'
     - name: Test with pytest
-      run: pytest
+      run: poetry run pytest
