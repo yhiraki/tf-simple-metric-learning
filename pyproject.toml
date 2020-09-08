@@ -13,11 +13,12 @@ tensorflow-probability = "^0.11.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0.1"
+pip = "^20.2.3"
 
 [tool.poetry-dynamic-versioning]
 enable = true
 style = "pep440"
 
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry>=0.12", "pip>=20.0.0"]
 build-backend = "poetry.masonry.api"
